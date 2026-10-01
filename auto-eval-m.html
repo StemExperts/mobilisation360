@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Résultats – La Mobilisation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --ink:         #002169;
+  --ink-soft:    #1d71b8;
+  --cream:       #f5f7fa;
+  --cream-dark:  #e8ecf2;
+  --gold:        #ffed00;
+  --gold-light:  #fff176;
+  --gold-bg:     #fffde7;
+  --blue:        #1d71b8;
+  --blue-light:  #d0e4f5;
+  --green:       #95c11f;
+  --green-light: #e8f5c0;
+  --teal:        #0090ac;
+  --teal-light:  #d0eef3;
+  --purple:      #6d2e8a;
+  --purple-light:#ead6f5;
+  --orange:      #e06b00;
+  --orange-light:#fde8cc;
+  --white:       #ffffff;
+  --shadow:      0 4px 28px rgba(0,33,105,0.10);
+  --shadow-lg:   0 10px 48px rgba(0,33,105,0.18);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; top: -180px; right: -180px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+  position: relative; z-index: 1;
+}
+.header {
+  text-align: center;
+  margin-bottom: 44px;
+  animation: fadeUp .65s ease both;
+}
+.eyebrow {
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 12px;
+  display: block;
+}
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px,4vw,32px); font-weight: 700;
+  line-height: 1.2; margin-bottom: 10px;
+}
+.participant-line {
+  font-size: 21px; color: var(--ink-soft);
+  margin-top: 6px;
+}
+.participant-line strong { color: var(--blue); font-weight: 600; }
+.divider {
+  width: 52px; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  margin: 18px auto 0; border-radius: 2px;
+}
+.hero-card {
+  background: var(--white);
+  border-radius: 16px; padding: 28px 24px 22px;
+  box-shadow: var(--shadow); text-align: center;
+  margin-bottom: 24px;
+  animation: fadeUp .65s .1s ease both;
+}
+.hero-gauge-wrap {
+  width: 260px; height: 130px;
+  margin: 0 auto 0;
+}
+.hero-gauge-center {
+  text-align: center; line-height: 1.25; margin-top: -8px;
+}
+.hero-score-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px; font-weight: 700; color: var(--ink);
+}
+.hero-score-sub { font-size: 12px; color: #888; }
+.hero-metrics {
+  display: flex; justify-content: center; align-items: center;
+  gap: 0; margin-top: 18px;
+  padding-top: 18px; border-top: 1px solid #eee;
+}
+.hero-metric { flex: 1; text-align: center; }
+.hero-metric-sep { width: 1px; height: 36px; background: #eee; flex-shrink: 0; }
+.hero-metric-label {
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 5px;
+}
+.hero-metric-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; line-height: 1;
+}
+.hero-zone-badge {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 4px 14px; border-radius: 20px; line-height: 1.6;
+}
+.sections-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 24px;
+  animation: fadeUp .65s .25s ease both;
+}
+@media(max-width:640px){ .sections-grid { grid-template-columns: 1fr; } }
+.section-card {
+  background: var(--white);
+  border-radius: 14px; padding: 22px 20px 20px;
+  box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+  transition: transform .2s;
+}
+.section-card:hover { transform: translateY(-2px); }
+.section-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+}
+.sc1::before { background: linear-gradient(90deg,#1d71b8,#4a90d9); }
+.sc2::before { background: linear-gradient(90deg,#95c11f,#b8df60); }
+.sc3::before { background: linear-gradient(90deg,#ffed00,#fff176); }
+.sc4::before { background: linear-gradient(90deg,#002169,#1d71b8); }
+.sc5::before { background: linear-gradient(90deg,#0090ac,#00b8d4); }
+.sc-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 14px;
+}
+.sc-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; font-weight: 700; line-height: 1.3;
+  flex: 1;
+}
+.sc-badge {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700;
+  white-space: nowrap; margin-left: 12px;
+}
+.sc-denom-sm { font-size: 12px; color: #888; }
+.q-row { margin-bottom: 10px; }
+.q-label {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: #555; margin-bottom: 4px;
+}
+.q-label .q-val { font-weight: 600; color: var(--ink); }
+.bar-track {
+  height: 8px; background: var(--cream-dark);
+  border-radius: 4px; overflow: hidden;
+}
+.bar-fill {
+  height: 100%; border-radius: 4px;
+  transition: width 1s ease;
+}
+.chart-card {
+  background: var(--white);
+  border-radius: 16px; padding: 24px;
+  box-shadow: var(--shadow);
+}
+.chart-title { font-size: 13px; font-weight: 700; color: #002169; }
+.chart-sub   { font-size: 11px; color: #aaa; }
+
+.table-wrap {
+  background: var(--white);
+  border-radius: 16px; padding: 28px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  animation: fadeUp .65s .38s ease both;
+  overflow-x: auto;
+}
+.table-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700; margin-bottom: 16px;
+}
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  text-align: left; padding: 8px 12px;
+  background: var(--cream); font-weight: 600;
+  font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+td {
+  padding: 10px 12px; border-bottom: 1px solid var(--cream-dark);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+.td-score { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+.td-bar { width: 120px; }
+.td-pct { font-size: 12px; color: #888; }
+
+/* ── Radar + Profil ── */
+.radar-profile-wrap {
+  max-width: 860px; margin: 32px auto 0; padding: 0 20px; margin-bottom: 32px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+.radar-card, .profile-card {
+  background: var(--white); border-radius: 18px;
+  padding: 28px 24px; box-shadow: 0 4px 28px rgba(0,33,105,0.09);
+}
+.radar-card-title {
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 700; color: var(--ink); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.radar-card-title-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex-shrink: 0;
+}
+.profile-badge {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px; margin-bottom: 12px;
+}
+.profile-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: var(--ink);
+  line-height: 1.2; margin-bottom: 14px;
+}
+.profile-section-title {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 700; color: #aaa; margin: 14px 0 6px;
+}
+.profile-text {
+  font-size: 13px; color: #555; line-height: 1.6;
+}
+.profile-interventions {
+  background: var(--cream); border-radius: 10px;
+  padding: 12px 14px; margin-top: 10px;
+}
+.profile-interventions li {
+  font-size: 12px; color: var(--ink); line-height: 1.7;
+  margin-left: 16px;
+}
+.zone-legend {
+  display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap;
+}
+.zone-dot {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: #888;
+}
+.zone-dot span {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+}
+
+.section-total-row td {
+  background: var(--cream-dark);
+  font-weight: 600;
+}
+.legend-wrap {
+  background: var(--white);
+  border-radius: 16px; padding: 28px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  animation: fadeUp .65s .44s ease both;
+}
+.legend-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700; margin-bottom: 16px;
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.legend-item {
+  border-radius: 10px; padding: 14px 16px;
+  font-size: 12px; line-height: 1.5;
+}
+.legend-item strong { display: block; font-size: 13px; margin-bottom: 2px; }
+.li-red    { background: #fde8e8; color: #8b1a1a; }
+.li-orange { background: var(--orange-light); color: #8b3a00; }
+.li-yellow { background: var(--gold-bg); color: #7a6200; }
+.li-green  { background: var(--green-light); color: #3a5a00; }
+.footer {
+  text-align: center; font-size: 11px; color: #aaa;
+  margin-top: 48px; animation: fadeUp .65s .5s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <span class="eyebrow">Formation Pratique en Gestion</span>
+    <h1>Mon équipe est-elle mobilisée?</h1>
+    <p class="participant-line" id="participantLine"></p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="hero-card">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px;">Niveau de Mobilisation Global</div>
+    <div class="hero-gauge-wrap">
+      <svg id="gaugeChart" viewBox="0 0 260 130" width="260" height="130" xmlns="http://www.w3.org/2000/svg">
+        <path id="gaugeTrack" d="" fill="none" stroke="#e8ecf2" stroke-width="22" stroke-linecap="round"/>
+        <path id="gaugeFill"  d="" fill="none" stroke="#e06b00" stroke-width="22" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hero-gauge-center">
+      <div class="hero-score-val"><span id="gaugePct">—</span><span style="font-size:22px;">%</span></div>
+      <div class="hero-score-sub"><span id="gaugeTotal">—</span> / 150 points</div>
+    </div>
+    <div class="hero-metrics">
+      <div class="hero-metric">
+        <div class="hero-metric-label">Score total</div>
+        <div class="hero-metric-val" style="color:var(--ink);"><span id="totalScore">—</span> <span style="font-size:13px;color:#aaa;font-weight:400;">/ 150</span></div>
+      </div>
+      <div class="hero-metric-sep"></div>
+      <div class="hero-metric">
+        <div class="hero-metric-label">Moy. géométrique</div>
+        <div class="hero-metric-val" style="color:var(--teal);"><span id="geoMean">—</span>%</div>
+      </div>
+      <div class="hero-metric-sep"></div>
+      <div class="hero-metric">
+        <div class="hero-metric-label">Zone</div>
+        <span class="hero-zone-badge" id="heroZoneBadge">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RADAR + PROFIL ── -->
+  <div class="radar-profile-wrap">
+
+    <!-- Radar pleine largeur -->
+    <div class="radar-card">
+      <div class="radar-card-title">
+        <span class="radar-card-title-dot"></span>
+        Profil radar | 5 dimensions
+      </div>
+      <canvas id="radarChart" style="max-height:460px;width:100%;"></canvas>
+      <div class="zone-legend">
+        <div class="zone-dot"><span style="background:#95c11f;"></span>  Élevé (≥ 9/10 géo.)</div>
+        <div class="zone-dot"><span style="background:#ffed00;"></span>  Moyen (5–8.9/10 géo.)</div>
+        <div class="zone-dot"><span style="background:#e53e3e;"></span>  Faible (&lt; 5/10 géo.)</div>
+        <div style="width:1px;height:14px;background:#ddd;"></div>
+        <div class="zone-dot"><span style="width:18px;height:3px;border-radius:0;border-top:2px dashed rgba(226,75,74,0.8);background:none;display:inline-block;"></span> Score recalibré (−20%)</div>
+      </div>
+      <div id="zoneBadgeRadar" style="margin-top:16px;"></div>
+    </div>
+
+  </div>
+
+  <div class="legend-wrap">
+    <div class="legend-title">Guide d'Interprétation</div>
+    <div class="legend-grid">
+      <div class="legend-item li-red">
+        <strong style="display:block;text-align:center;">Équipe démobilisée<br><span style="font-weight:400;display:block;text-align:center;margin-top:2px;">0 % – 44 %</span></strong>
+        Les employés investissent peu d'énergie, ne se reconnaissent plus dans les priorités et entretiennent un détachement envers leur équipe. Des interventions urgentes sont nécessaires.
+        <div style="margin-top:8px;font-size:11px;font-weight:600;color:#8b1a1a;">Interventions recommandées :</div>
+        <ul style="margin-left:14px;margin-top:4px;">
+          <li>Reconstruire les bases de l'ancrage psychologique</li>
+          <li>Restaurer la confiance organisationnelle</li>
+          <li>Redonner un sens clair au travail et aux priorités</li>
+        </ul>
+      </div>
+      <div class="legend-item li-orange">
+        <strong style="display:block;text-align:center;">Mobilisation faible<br><span style="font-weight:400;display:block;text-align:center;margin-top:2px;">45 % – 74 %</span></strong>
+        Les employés accomplissent leur travail sans véritable adhésion aux priorités ou aux valeurs organisationnelles. L'engagement peut être superficiel ou motivé par des pressions externes.
+        <div style="margin-top:8px;font-size:11px;font-weight:600;color:#8b3a00;">Interventions recommandées :</div>
+        <ul style="margin-left:14px;margin-top:4px;">
+          <li>Clarifier les attentes et les priorités stratégiques</li>
+          <li>Renforcer la responsabilisation individuelle</li>
+          <li>Améliorer la communication organisationnelle</li>
+        </ul>
+      </div>
+      <div class="legend-item li-yellow">
+        <strong style="display:block;text-align:center;">Mobilisation fragile<br><span style="font-weight:400;display:block;text-align:center;margin-top:2px;">75 % – 89 %</span></strong>
+        Les résultats sont présents, mais certaines dimensions montrent des failles. L'attachement à l'organisation ou l'alignement stratégique peut être fragilisé. Risque de détérioration si rien n'est fait.
+        <div style="margin-top:8px;font-size:11px;font-weight:600;color:#7a6200;">Interventions recommandées :</div>
+        <ul style="margin-left:14px;margin-top:4px;">
+          <li>Identifier les dimensions les plus faibles et intervenir rapidement</li>
+          <li>Renforcer la reconnaissance et le sens du travail</li>
+          <li>Consolider l'identité collective de l'équipe</li>
+        </ul>
+      </div>
+      <div class="legend-item li-green">
+        <strong style="display:block;text-align:center;">Équipe mobilisée<br><span style="font-weight:400;display:block;text-align:center;margin-top:2px;">90 % – 100 %</span></strong>
+        L'équipe démontre une cohérence entre la qualité du travail, l'énergie investie et l'adhésion aux valeurs. Les employés s'identifient à leur travail et contribuent activement à la réussite collective.
+        <div style="margin-top:8px;font-size:11px;font-weight:600;color:#3a5a00;">Interventions recommandées :</div>
+        <ul style="margin-left:14px;margin-top:4px;">
+          <li>Maintenir les conditions favorables à la mobilisation</li>
+          <li>Soutenir le développement professionnel</li>
+          <li>Renforcer la culture organisationnelle</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--cream-dark);">
+      <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;margin-bottom:6px;">Moyenne géométrique</div>
+      <p style="font-size:12px;color:#555;line-height:1.6;">Contrairement à la moyenne arithmétique, la moyenne géométrique amplifie l'impact de vos scores les plus bas. Elle vous maintient responsable même lorsque la majorité de vos réponses sont élevées. C'est elle qui détermine votre zone de mobilisation.</p>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:24px;">
+    <div class="chart-title" style="margin-bottom:4px;">Forces et Faiblesses par Dimension</div>
+    <div class="chart-sub" style="margin-bottom:0;">Scores géométriques par dimension · /10</div>
+    <div style="display:grid;grid-template-columns:190px 1fr 56px;gap:14px;margin:14px 0 10px;padding-bottom:8px;border-bottom:1px solid #eee;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#aaa;">Dimension</div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#aaa;display:flex;justify-content:space-between;padding:0 2px;"><span>0%</span><span>50%</span><span>100%</span></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#aaa;text-align:right;">Géo.</div>
+    </div>
+    <div id="dimCompBars"></div>
+    <div style="display:flex;margin-top:14px;padding-top:12px;border-top:1px solid #eee;">
+      <span style="font-size:10px;color:#bbb;margin-left:auto;">La ligne verticale indique 50%</span>
+    </div>
+  </div>
+
+  <!-- Detailed table -->
+  <div class="table-wrap">
+    <div class="table-title">Tableau Détaillé des Résultats</div>
+
+    <!-- Catégorie 1 : Manifestation -->
+    <div style="background:#002169;border-radius:8px 8px 0 0;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+      <div>
+        <div style="color:#fff;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">Manifestation de la mobilisation</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:11px;margin-top:2px;">Résultat global</div>
+      </div>
+      <div id="catScore1" style="color:#ffed00;font-size:28px;font-weight:700;line-height:1;"></div>
+    </div>
+    <table style="margin-bottom:0;">
+      <thead><tr><th>Dimension</th><th>Critère</th><th>Score /10</th><th class="td-bar">Niveau</th><th>%</th><th>Moy. géo.</th></tr></thead>
+      <tbody id="detailTable1"></tbody>
+    </table>
+
+    <!-- Catégorie 2 : Dimension psychologique -->
+    <div style="background:#0090ac;border-radius:8px 8px 0 0;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
+      <div>
+        <div style="color:#fff;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">Dimension psychologique</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:11px;margin-top:2px;">Lien affectif vs Lien forcé</div>
+      </div>
+      <div id="catScore2" style="color:#ffed00;font-size:28px;font-weight:700;line-height:1;"></div>
+    </div>
+    <table style="margin-bottom:0;">
+      <thead><tr><th>Dimension</th><th>Critère</th><th>Score /10</th><th class="td-bar">Niveau</th><th>%</th><th>Moy. géo.</th></tr></thead>
+      <tbody id="detailTable2"></tbody>
+    </table>
+
+    <!-- Ligne de total global -->
+    <div id="globalTotalRow" style="background:var(--ink);border-radius:0 0 8px 8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:0;"></div>
+
+  </div>
+
+  <div class="footer">
+    Formation Pratique en Gestion · La Mobilisation<br>
+    Inspiré de : Tremblay, Michel. <em>Mobilisation des personnes au travail.</em> HEC Montréal, 2012.
+  </div>
+</div>
+
+<script>
+function params() {
+  const p = new URLSearchParams(window.location.search);
+  const prenom = p.get('Prénom') || p.get('prenom') || '';
+  const nom    = p.get('Nom')    || p.get('nom')    || '';
+  const full   = [prenom, nom].filter(Boolean).join(' ');
+  return {
+    name:    full    || p.get('name')    || 'Participant',
+    email:   p.get('E-mail')     || p.get('email')   || '',
+    dept:    p.get('Département') || p.get('dept')   || '',
+    pos:     p.get('Poste')      || p.get('pos')     || '',
+    company: p.get('Pharmacie')  || p.get('pharma') || p.get('company') || '',
+    date:    p.get('Date du workshop') || p.get('date') || '',
+    q1:  +p.get('q1')  || 0,
+    q2:  +p.get('q2')  || 0,
+    q3:  +p.get('q3')  || 0,
+    q4:  +p.get('q4')  || 0,
+    q5:  +p.get('q5')  || 0,
+    q6:  +p.get('q6')  || 0,
+    q7:  +p.get('q7')  || 0,
+    q8:  +p.get('q8')  || 0,
+    q9:  +p.get('q9')  || 0,
+    q10: +p.get('q10') || 0,
+    q11: +p.get('q11') || 0,
+    q12: +p.get('q12') || 0,
+    q13: +p.get('q13') || 0,
+    q14: +p.get('q14') || 0,
+    q15: +p.get('q15') || 0,
+  };
+}
+
+function geoMean(vals) {
+  const pos = vals.map(v => v === 0 ? 0.1 : v);
+  const product = pos.reduce((a,b) => a * b, 1);
+  return Math.pow(product, 1 / pos.length);
+}
+
+function scoreColor(pct) {
+  if (pct >= 80) return '#95c11f';
+  if (pct >= 60) return '#0090ac';
+  if (pct >= 40) return '#ffed00';
+  return '#1d71b8';
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function setBar(barId, pct, color) {
+  const el = document.getElementById(barId);
+  if (el) { el.style.width = pct + '%'; el.style.background = color; }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const p = params();
+
+  const infoLine = document.getElementById('participantLine');
+  const parts = [
+    `<strong>${p.name}</strong>`,
+    p.pos     ? `<span>· ${p.pos}</span>`     : '',
+    p.company ? `<span>· ${p.company}</span>` : '',
+    p.dept    ? `<span>· ${p.dept}</span>`    : '',
+    p.date    ? `<span>· ${p.date}</span>`    : '',
+  ].filter(Boolean).join(' ');
+  infoLine.innerHTML = parts;
+
+  const s1 = p.q1 + p.q2 + p.q3;
+  const s2 = p.q4 + p.q5 + p.q6;
+  const s3 = p.q7 + p.q8 + p.q9;
+  const s4 = p.q10 + p.q11 + p.q12;
+  const s5 = p.q13 + p.q14 + p.q15;
+  const total = s1 + s2 + s3 + s4 + s5;
+  const totalPct = Math.round(total / 150 * 100);
+
+  const allVals = [p.q1,p.q2,p.q3,p.q4,p.q5,p.q6,p.q7,p.q8,p.q9,p.q10,p.q11,p.q12,p.q13,p.q14,p.q15];
+  const arith = allVals.reduce((a,b)=>a+b,0) / allVals.length;
+  const geo   = geoMean(allVals);
+  const geoPctGlobal = Math.round(geo / 10 * 100);
+
+  setText('totalScore',  total);
+  setText('geoMean',     Math.round(geo   / 10 * 100));
+  setText('gaugePct',    geoPctGlobal);
+  setText('gaugeTotal',  total);
+
+  // Arith vs Geo bars per dimension
+  // Forces et Faiblesses par Dimension
+  const dimDefs = [
+    { label:'Performance supérieure',          color:'#1d71b8', vals:[p.q1,  p.q2,  p.q3]  },
+    { label:"Investissement d'énergies",        color:'#95c11f', vals:[p.q4,  p.q5,  p.q6]  },
+    { label:"Points d'ancrage psychologique",   color:'#ffed00', vals:[p.q7,  p.q8,  p.q9]  },
+    { label:"Bases de l'ancrage",               color:'#002169', vals:[p.q10, p.q11, p.q12] },
+    { label:"Engagement global",                color:'#0090ac', vals:[p.q13, p.q14, p.q15] },
+  ];
+  const wrap = document.getElementById('dimCompBars');
+  if (wrap) {
+    wrap.innerHTML = '';
+    const maxH = 18;
+    dimDefs.forEach(d => {
+      const geo_d = geoMean(d.vals);
+      const pctG  = Math.round(geo_d * 10);
+      const txtCol = d.color === '#95c11f' ? '#6a8a15' : d.color === '#ffed00' ? '#7a6200' : d.color;
+
+      const row = document.createElement('div');
+      row.style.cssText = 'display:grid;grid-template-columns:190px 1fr 56px;gap:14px;align-items:center;margin-bottom:16px;';
+
+      const nameCol = document.createElement('div');
+      nameCol.innerHTML = '<div style="font-size:13px;font-weight:600;color:#002169;line-height:1.3;">' + d.label + '</div>';
+
+      const trackWrap = document.createElement('div');
+      trackWrap.style.cssText = 'position:relative;';
+      const track = document.createElement('div');
+      track.style.cssText = 'height:' + maxH + 'px;background:#f0f2f7;border-radius:9px;overflow:hidden;position:relative;';
+      const fill = document.createElement('div');
+      fill.style.cssText = 'height:100%;width:0%;background:' + d.color + ';border-radius:9px;transition:width 1s cubic-bezier(.4,0,.2,1);';
+      track.appendChild(fill);
+      const ref = document.createElement('div');
+      ref.style.cssText = 'position:absolute;top:-4px;bottom:-4px;left:50%;width:2px;background:rgba(0,0,0,0.13);border-radius:1px;pointer-events:none;';
+      trackWrap.appendChild(track);
+      trackWrap.appendChild(ref);
+      setTimeout(() => { fill.style.width = pctG + '%'; }, 80);
+
+      const val = document.createElement('div');
+      val.style.cssText = 'font-size:15px;font-weight:700;color:' + txtCol + ';text-align:right;';
+      val.textContent = pctG + '%';
+
+      row.appendChild(nameCol);
+      row.appendChild(trackWrap);
+      row.appendChild(val);
+      wrap.appendChild(row);
+    });
+  }
+
+  // Gauge SVG
+  let gColor;
+  if (geoPctGlobal >= 90)      gColor = '#95c11f';
+  else if (geoPctGlobal >= 75) gColor = '#ffed00';
+  else if (geoPctGlobal >= 45) gColor = '#e06b00';
+  else                          gColor = '#e53e3e';
+  (function() {
+    const cx = 130, cy = 120, r = 96;
+    const startAngle = Math.PI;       // gauche (180°)
+    const endAngle   = 2 * Math.PI;   // droite (360°)
+    function polarToXY(angle) {
+      return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+    }
+    function arcPath(from, to) {
+      const s = polarToXY(from), e = polarToXY(to);
+      const large = (to - from) > Math.PI ? 1 : 0;
+      return `M ${s.x} ${s.y} A ${r} ${r} 0 ${large} 1 ${e.x} ${e.y}`;
+    }
+    document.getElementById('gaugeTrack').setAttribute('d', arcPath(startAngle, endAngle));
+    document.getElementById('gaugeFill').setAttribute('stroke', gColor);
+    const gaugeVal = Math.min(geoPctGlobal, 100);
+    const fillAngle = startAngle + (gaugeVal / 100) * Math.PI;
+    document.getElementById('gaugeFill').setAttribute('d', arcPath(startAngle, fillAngle));
+    // Animation
+    const fillEl = document.getElementById('gaugeFill');
+    const len = fillEl.getTotalLength ? fillEl.getTotalLength() : 300;
+    fillEl.style.strokeDasharray = len;
+    fillEl.style.strokeDashoffset = len;
+    fillEl.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
+    setTimeout(() => { fillEl.style.strokeDashoffset = 0; }, 80);
+  })();
+
+  // Scores des catégories — arithmétique + géométrique
+  const cat1Score = Math.round((s1 + s2) / 60 * 100);
+  const cat2Score = Math.round((s3 + s4 + s5) / 90 * 100);
+  const cat1Geo   = Math.round(geoMean([p.q1,p.q2,p.q3,p.q4,p.q5,p.q6]) / 10 * 100);
+  const cat2Geo   = Math.round(geoMean([p.q7,p.q8,p.q9,p.q10,p.q11,p.q12,p.q13,p.q14,p.q15]) / 10 * 100);
+  const cat1El = document.getElementById('catScore1');
+  const cat2El = document.getElementById('catScore2');
+  if (cat1El) cat1El.innerHTML = `
+    <div style="text-align:right;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.65);">Géo. <span style="color:#ffed00;font-size:16px;font-weight:700;">${cat1Geo}%</span></div>
+    </div>`;
+  if (cat2El) cat2El.innerHTML = `
+    <div style="text-align:right;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.65);">Géo. <span style="color:#ffed00;font-size:16px;font-weight:700;">${cat2Geo}%</span></div>
+    </div>`;
+
+  const sections1 = [
+    {
+      name: 'Performance supérieure', color: '#1d71b8',
+      questions: [
+        { label: 'Travail de qualité',              val: p.q1 },
+        { label: 'Travail avec une valeur ajoutée', val: p.q2 },
+        { label: "Travail d'équipe",                val: p.q3 },
+      ], total: s1
+    },
+    {
+      name: "Investissement d'énergie", color: '#95c11f',
+      questions: [
+        { label: "Efforts d'amélioration continue",    val: p.q4 },
+        { label: "Efforts d'alignement stratégique",   val: p.q5 },
+        { label: "Efforts de coordination spontannée", val: p.q6 },
+      ], total: s2
+    },
+  ];
+
+  const sections2 = [
+    {
+      name: "Points d'ancrage psychologique", color: '#b8a800',
+      questions: [
+        { label: 'Attachement au travail',                val: p.q7  },
+        { label: 'Attachement envers la haute direction', val: p.q8  },
+        { label: 'Attachement à la collectivité',         val: p.q9  },
+      ], total: s3
+    },
+    {
+      name: "Bases de l'ancrage", color: '#002169',
+      questions: [
+        { label: 'Idéal professionnel',                            val: p.q10 },
+        { label: 'Intériorisation des priorités',                  val: p.q11 },
+        { label: 'Identifications aux valeurs organisationnelles', val: p.q12 },
+      ], total: s4
+    },
+    {
+      name: "Engagement global", color: '#0090ac',
+      questions: [
+        { label: "Niveau d'engagement dans le travail", val: p.q13 },
+        { label: "Niveau d'engagement stratégique",     val: p.q14 },
+        { label: "Engagement collectif",                val: p.q15 },
+      ], total: s5
+    },
+  ];
+
+  function fillTable(tbodyId, sections) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    sections.forEach(sec => {
+      const txtCol = sec.color === '#b8a800' ? '#b8a800' : sec.color;
+      const barCol = sec.color === '#b8a800' ? '#ffed00' : sec.color;
+      sec.questions.forEach((q, i) => {
+        const pct = Math.round(q.val / 10 * 100);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${i === 0 ? `<span style="color:${txtCol};font-weight:600">${sec.name}</span>` : ''}</td>
+          <td>${q.label}</td>
+          <td class="td-score" style="color:${txtCol}">${q.val}</td>
+          <td class="td-bar">
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${barCol}"></div></div>
+          </td>
+          <td class="td-pct">${pct}%</td>
+          <td></td>
+        `;
+        tbody.appendChild(row);
+      });
+      // Ligne sous-total avec moyenne géométrique de la dimension
+      const secGeo    = geoMean(sec.questions.map(q => q.val));
+      const secGeoPct = Math.round(secGeo / 10 * 100);
+      const trow = document.createElement('tr');
+      trow.className = 'section-total-row';
+      trow.innerHTML = `
+        <td colspan="2" style="text-align:right;color:${txtCol}">Sous-total – ${sec.name}</td>
+        <td class="td-score" style="color:${txtCol}">${sec.total}<span class="td-pct">/30</span></td>
+        <td class="td-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.round(sec.total/30*100)}%;background:${barCol}"></div></div>
+        </td>
+        <td class="td-pct">${Math.round(sec.total/30*100)}%</td>
+        <td class="td-pct" style="font-weight:700;color:${txtCol};">${secGeoPct}%</td>
+      `;
+      tbody.appendChild(trow);
+    });
+  }
+
+  fillTable('detailTable1', sections1);
+  fillTable('detailTable2', sections2);
+
+  // ── RADAR CHART ─────────────────────────────────────────────────────────────
+  const radarCtx = document.getElementById('radarChart').getContext('2d');
+
+  // Scores géométriques par dimension (sur 30)
+  const geoS1 = Math.pow([p.q1,  p.q2,  p.q3 ].map(v => v===0?0.1:v).reduce((a,b)=>a*b,1), 1/3);
+  const geoS2 = Math.pow([p.q4,  p.q5,  p.q6 ].map(v => v===0?0.1:v).reduce((a,b)=>a*b,1), 1/3);
+  const geoS3 = Math.pow([p.q7,  p.q8,  p.q9 ].map(v => v===0?0.1:v).reduce((a,b)=>a*b,1), 1/3);
+  const geoS4 = Math.pow([p.q10, p.q11, p.q12].map(v => v===0?0.1:v).reduce((a,b)=>a*b,1), 1/3);
+  const geoS5 = Math.pow([p.q13, p.q14, p.q15].map(v => v===0?0.1:v).reduce((a,b)=>a*b,1), 1/3);
+  // Ramener sur 30 : moyenne géo × 3
+  const radarVals = [geoS1*3, geoS2*3, geoS3*3, geoS4*3, geoS5*3].map(v => Math.round(v*10)/10);
+
+  const radarZonePlugin = {
+    id: 'radarZones',
+    beforeDraw(chart) {
+      const { ctx, scales } = chart;
+      const scale = scales.r;
+      if (!scale) return;
+      const center = { x: scale.xCenter, y: scale.yCenter };
+      const getR = val => scale.getDistanceFromCenterForValue(val);
+      const zones = [
+        { max: 30, color: 'rgba(149,193,31,0.34)' },
+        { max: 20, color: 'rgba(255,225,7,0.38)'  },
+        { max: 10, color: 'rgba(220,38,38,0.38)'  },
+      ];
+      zones.forEach(z => {
+        const r = getR(z.max);
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = z.color;
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+  };
+
+  new Chart(radarCtx, {
+    type: 'radar',
+    plugins: [radarZonePlugin],
+    data: {
+      labels: ['Performance\nsupérieure', "Investissement\nd'énergie", "Points d'ancrage\npsychologiques", "Bases de\nl'ancrage", 'Engagement\nglobal'],
+      datasets: [{
+        label: 'Compétences (géo.)',
+        data: radarVals,
+        backgroundColor: 'rgba(29,113,184,0.18)',
+        borderColor: '#1d71b8',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#1d71b8',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+      {
+        label: 'Score recalibré (−20%)',
+        data: radarVals.map(v => Math.round(v * 0.8 * 10) / 10),
+        backgroundColor: 'rgba(226,75,74,0.07)',
+        borderColor: 'rgba(226,75,74,0.8)',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointBackgroundColor: 'rgba(226,75,74,1)',
+        pointRadius: 3,
+        pointHoverRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 0, max: 30,
+          ticks: { stepSize: 10, font: { size: 10 }, color: '#aaa', backdropColor: 'transparent', callback: v => v },
+          pointLabels: { font: { size: 11, family: "'DM Sans', sans-serif" }, color: '#002169' },
+          grid: { color: 'rgba(0,33,105,0.08)' },
+          angleLines: { color: 'rgba(0,33,105,0.1)' },
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ' : ' + ctx.raw + ' / 30' } }
+      },
+      animation: { duration: 1000 }
+    }
+  });
+
+  // ── ZONE DE MOBILISATION (basée sur la moyenne géométrique globale) ──────────
+  let zoneLabel, zoneBadgeColor, zoneBadgeText, zoneInterpretation, zoneInterventions;
+  if (geoPctGlobal >= 90) {
+    zoneLabel = 'Équipe mobilisée';
+    zoneBadgeColor = '#e8f5c0'; zoneBadgeText = '#3a7000';
+    zoneInterpretation = "L'équipe démontre une cohérence entre la qualité du travail, l'énergie investie et l'adhésion aux valeurs organisationnelles. Les employés s'identifient à leur travail et contribuent activement à la réussite collective.";
+    zoneInterventions = ["Maintenir les conditions favorables à la mobilisation", "Soutenir le développement professionnel", "Renforcer la culture organisationnelle"];
+  } else if (geoPctGlobal >= 75) {
+    zoneLabel = 'Mobilisation fragile';
+    zoneBadgeColor = '#fff3cd'; zoneBadgeText = '#7a4f00';
+    zoneInterpretation = "Les résultats sont présents, mais certaines dimensions montrent des failles. L'attachement à l'organisation ou l'alignement stratégique peut être fragilisé. Risque de détérioration si rien n'est fait.";
+    zoneInterventions = ["Identifier les dimensions les plus faibles et intervenir rapidement", "Renforcer la reconnaissance et le sens du travail", "Consolider l'identité collective de l'équipe"];
+  } else if (geoPctGlobal >= 45) {
+    zoneLabel = 'Mobilisation faible';
+    zoneBadgeColor = '#ffe8cc'; zoneBadgeText = '#8b3a00';
+    zoneInterpretation = "Les employés accomplissent leur travail sans véritable adhésion aux priorités ou aux valeurs organisationnelles. L'engagement peut être superficiel ou motivé par des pressions externes plutôt que par un attachement réel à l'équipe.";
+    zoneInterventions = ["Clarifier les attentes et les priorités stratégiques", "Renforcer la responsabilisation individuelle", "Améliorer la communication organisationnelle"];
+  } else {
+    zoneLabel = 'Équipe démobilisée';
+    zoneBadgeColor = '#fde8e8'; zoneBadgeText = '#8b0000';
+    zoneInterpretation = "Les employés investissent peu d'énergie dans leur travail, ne se reconnaissent plus dans les priorités organisationnelles et entretiennent un détachement envers leur équipe. Des interventions urgentes sont nécessaires pour reconstruire les bases de la mobilisation.";
+    zoneInterventions = ["Reconstruire les bases de l'ancrage psychologique", "Restaurer la confiance organisationnelle", "Redonner un sens clair au travail et aux priorités"];
+  }
+
+  const zoneBadgeEl = document.getElementById('zoneBadgeRadar');
+  if (zoneBadgeEl) {
+    zoneBadgeEl.innerHTML =
+      '<span class="profile-badge" style="background:' + zoneBadgeColor + ';color:' + zoneBadgeText + ';font-size:12px;padding:6px 16px;">' +
+      zoneLabel + ' · ' + geoPctGlobal + '% (géo.)' +
+      '</span>';
+  }
+  const heroZoneBadgeEl = document.getElementById('heroZoneBadge');
+  if (heroZoneBadgeEl) {
+    heroZoneBadgeEl.textContent = zoneLabel;
+    heroZoneBadgeEl.style.background = zoneBadgeColor;
+    heroZoneBadgeEl.style.color = zoneBadgeText;
+  }
+
+  // Ligne de total global
+  const globalEl = document.getElementById('globalTotalRow');
+  if (globalEl) {
+    const arithPct = Math.round(arith / 10 * 100);
+    const geoPct   = Math.round(geo   / 10 * 100);
+    globalEl.innerHTML = `
+      <div style="color:#fff;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">
+        Total global
+      </div>
+      <div style="display:flex;gap:24px;align-items:center;">
+        <div style="text-align:center;">
+          <div style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Score</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#ffed00;line-height:1;">${total}<span style="font-size:12px;color:rgba(255,255,255,0.5);font-weight:400;"> / 150</span></div>
+        </div>
+        <div style="width:1px;height:36px;background:rgba(255,255,255,0.2);"></div>
+        <div style="text-align:center;">
+          <div style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Géo.</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#ffed00;line-height:1;">${geoPct}%</div>
+        </div>
+      </div>`;
+  }
+});
+</script>
+</body>
+</html>
