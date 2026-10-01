@@ -180,12 +180,24 @@ body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(
     <div class="participant-sub" id="psSub">Moyenne des évaluations reçues (sondage "Évaluation des gestionnaires par les gestionnaires")</div>
   </div>
 
-  <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+  <div style="background:#002169;border-radius:10px 10px 0 0;padding:10px 18px;">
+    <div style="color:#fff;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">Manifestation de la mobilisation</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:0;border-radius:0 0 10px 10px;background:rgba(0,33,105,0.04);padding:14px;border:1px solid rgba(0,33,105,0.1);border-top:none;">
     <div class="kpi-card" style="border-color:#1d71b8;"><div class="kpi-label">Performance Supérieure</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpid1">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
-    <div class="kpi-card" style="border-color:#95c11f;"><div class="kpi-label">Énergies Investies</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpid2">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
+    <div class="kpi-card" style="border-color:#95c11f;"><div class="kpi-label">Investissement d'Énergies</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpid2">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
+  </div>
+
+  <div style="background:#0090ac;border-radius:10px 10px 0 0;padding:10px 18px;margin-top:16px;">
+    <div style="color:#fff;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">Dimension psychologique</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;border-radius:0 0 10px 10px;background:rgba(0,144,172,0.04);padding:14px;border:1px solid rgba(0,144,172,0.15);border-top:none;">
     <div class="kpi-card" style="border-color:#d4a017;"><div class="kpi-label">Ancrage Psychologique</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpid3">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
     <div class="kpi-card" style="border-color:#002169;"><div class="kpi-label">Bases de l'Ancrage</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpid4">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
     <div class="kpi-card" style="border-color:#0090ac;"><div class="kpi-label">Engagement Global</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpid5">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
+  </div>
+
+  <div class="kpi-grid" style="grid-template-columns:1fr;">
     <div class="kpi-card glob"><div class="kpi-label">Global (15 questions)</div><div class="kpi-row" style="justify-content:center;"><div class="kpi-block auto"><div class="kpi-num" id="psKpiGlob">—</div><div class="kpi-sub">Moy. géo.</div></div></div></div>
   </div>
 
@@ -224,7 +236,11 @@ body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(
     <div class="status-badges" id="statusBadges"></div>
   </div>
 
-  <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+  <!-- Catégorie 1 : Manifestation de la mobilisation -->
+  <div style="background:#002169;border-radius:10px 10px 0 0;padding:10px 18px;">
+    <div style="color:#fff;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">Manifestation de la mobilisation</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:0;border-radius:0 0 10px 10px;background:rgba(0,33,105,0.04);padding:14px;border:1px solid rgba(0,33,105,0.1);border-top:none;">
     <div class="kpi-card" style="border-color:#1d71b8;">
       <div class="kpi-label">Performance Supérieure</div>
       <div class="kpi-row">
@@ -241,6 +257,13 @@ body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(
         <div class="kpi-block peer"><div class="kpi-num" id="kpid2Peer">—</div><div class="kpi-sub" id="kpid2PeerLabel">Pairs</div></div>
       </div>
     </div>
+  </div>
+
+  <!-- Catégorie 2 : Dimension psychologique -->
+  <div style="background:#0090ac;border-radius:10px 10px 0 0;padding:10px 18px;margin-top:16px;">
+    <div style="color:#fff;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">Dimension psychologique</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;border-radius:0 0 10px 10px;background:rgba(0,144,172,0.04);padding:14px;border:1px solid rgba(0,144,172,0.15);border-top:none;">
     <div class="kpi-card" style="border-color:#d4a017;">
       <div class="kpi-label">Ancrage Psychologique</div>
       <div class="kpi-row">
@@ -265,6 +288,9 @@ body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(
         <div class="kpi-block peer"><div class="kpi-num" id="kpid5Peer">—</div><div class="kpi-sub" id="kpid5PeerLabel">Pairs</div></div>
       </div>
     </div>
+  </div>
+
+  <div class="kpi-grid" style="grid-template-columns:1fr;">
     <div class="kpi-card glob">
       <div class="kpi-label">Global (15 questions)</div>
       <div class="kpi-row">
@@ -289,6 +315,11 @@ body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(
       <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span> Évaluation par les pairs (moyenne)</div>
     </div>
     <canvas id="radarChart" style="max-height:420px;"></canvas>
+    <div class="legend-row" style="margin-top:10px;gap:16px;font-size:11px;">
+      <div class="legend-item"><span class="legend-dot" style="background:#95c11f"></span> Élevé (≥ 9/10)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ffed00"></span> Moyen (5–8.9/10)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#e53e3e"></span> Faible (&lt; 5/10)</div>
+    </div>
     <div id="zoneBadges" style="margin-top:16px;padding-top:14px;border-top:1px solid #e8ecf2;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;"></div>
 
     <!-- Guide d'interprétation -->
@@ -389,18 +420,22 @@ const COL_PEER = {
   q: [10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], // q1..q15
 };
 
-// 5 dimensions, 3 questions chacune
+// 5 dimensions, 3 questions chacune, regroupées en 2 grandes catégories
 const DIM_DEFS = [
-  { key:'d1', label:'Performance Supérieure',         color:'#1d71b8', qIdx:[0,1,2],
+  { key:'d1', cat:1, label:'Performance Supérieure',         color:'#1d71b8', qIdx:[0,1,2],
     qLabels:['Travail de qualité','Travail avec une valeur ajoutée',"Travail d'équipe"] },
-  { key:'d2', label:"Investissement d'Énergies",      color:'#95c11f', qIdx:[3,4,5],
+  { key:'d2', cat:1, label:"Investissement d'Énergies",      color:'#95c11f', qIdx:[3,4,5],
     qLabels:["Efforts d'amélioration continue","Efforts d'alignement stratégique","Efforts de coordination spontanée"] },
-  { key:'d3', label:"Points d'Ancrage Psychologique", color:'#ffed00', qIdx:[6,7,8],
+  { key:'d3', cat:2, label:"Points d'Ancrage Psychologique", color:'#ffed00', qIdx:[6,7,8],
     qLabels:['Attachement au travail','Attachement envers la haute direction','Attachement à la collectivité'] },
-  { key:'d4', label:"Bases de l'Ancrage",              color:'#002169', qIdx:[9,10,11],
+  { key:'d4', cat:2, label:"Bases de l'Ancrage",              color:'#002169', qIdx:[9,10,11],
     qLabels:['Idéal professionnel','Intériorisation des priorités','Identification aux valeurs organisationnelles'] },
-  { key:'d5', label:'Engagement Global',               color:'#0090ac', qIdx:[12,13,14],
+  { key:'d5', cat:2, label:'Engagement Global',               color:'#0090ac', qIdx:[12,13,14],
     qLabels:["Niveau d'engagement dans le travail","Niveau d'engagement stratégique","Engagement collectif"] },
+];
+const CATEGORY_DEFS = [
+  { num:1, label:'Manifestation de la mobilisation', color:'#002169', bgTint:'rgba(0,33,105,0.04)', borderTint:'rgba(0,33,105,0.1)' },
+  { num:2, label:'Dimension psychologique',          color:'#0090ac', bgTint:'rgba(0,144,172,0.04)', borderTint:'rgba(0,144,172,0.15)' },
 ];
 
 let autoRows = [], peerRows = [];
@@ -725,7 +760,7 @@ function renderComparatif(person) {
   const peerGlob = peerFlat ? geoMean(peerFlat) : null;
   setKPI('Glob', autoGlob, peerGlob, peerMatches.length);
 
-  renderRadar(autoFlat, peerFlat);
+  renderRadar(autoGeoByDim, peerGeoByDim);
   renderZoneBadges(autoGlob, peerGlob);
   renderCompBarChart(autoGeoByDim, peerGeoByDim, autoGlob, peerGlob);
   DIM_DEFS.forEach(dim => {
@@ -829,20 +864,40 @@ function renderDualBars(containerId, labels, autoVals, peerVals) {
   }).join('');
 }
 
-function renderRadar(autoFlat, peerFlat) {
-  const labels = DIM_DEFS.flatMap(d => d.qLabels);
+const radarZonePlugin = {
+  id: 'radarZonesComparatif',
+  beforeDraw(chart) {
+    const { ctx, scales } = chart;
+    const scale = scales.r;
+    if (!scale) return;
+    const center = { x: scale.xCenter, y: scale.yCenter };
+    const getR = val => scale.getDistanceFromCenterForValue(val);
+    [{max:30,color:'rgba(149,193,31,0.34)'},{max:20,color:'rgba(255,235,7,0.38)'},{max:10,color:'rgba(220,38,38,0.40)'}]
+    .forEach(z => { ctx.save(); ctx.beginPath(); ctx.arc(center.x,center.y,getR(z.max),0,Math.PI*2); ctx.fillStyle=z.color; ctx.fill(); ctx.restore(); });
+  }
+};
+
+// Convertit un % géométrique (0-100) en valeur sur l'échelle /30 utilisée par le radar
+function pctTo30(pct) {
+  return pct !== null && pct !== undefined ? Math.round(pct/100*30*10)/10 : null;
+}
+
+function renderRadar(autoGeoByDim, peerGeoByDim) {
+  const labels = DIM_DEFS.map(d => d.label);
   const datasets = [];
-  if (autoFlat) {
+  const autoVals = DIM_DEFS.map(d => pctTo30(autoGeoByDim[d.key]));
+  const peerVals = DIM_DEFS.map(d => pctTo30(peerGeoByDim[d.key]));
+  if (autoVals.some(v => v !== null)) {
     datasets.push({
       label: 'Auto-évaluation',
-      data: autoFlat,
+      data: autoVals,
       borderColor: '#1d71b8', backgroundColor: 'rgba(29,113,184,0.15)', pointBackgroundColor: '#1d71b8',
     });
   }
-  if (peerFlat) {
+  if (peerVals.some(v => v !== null)) {
     datasets.push({
       label: 'Évaluation par les pairs',
-      data: peerFlat,
+      data: peerVals,
       borderColor: '#95c11f', backgroundColor: 'rgba(149,193,31,0.15)', pointBackgroundColor: '#95c11f',
     });
   }
@@ -850,11 +905,12 @@ function renderRadar(autoFlat, peerFlat) {
   if (radarChartInst) radarChartInst.destroy();
   radarChartInst = new Chart(ctx, {
     type: 'radar',
+    plugins: [radarZonePlugin],
     data: { labels, datasets },
     options: {
       responsive: true,
-      scales: { r: { min:0, max:10, ticks:{ stepSize:2 }, pointLabels:{ font:{ size:9 } } } },
-      plugins: { legend: { display:false } },
+      scales: { r: { min:0, max:30, ticks:{ stepSize:10, backdropColor:'transparent' }, pointLabels:{ font:{ size:10 } }, grid:{ color:'rgba(0,33,105,0.08)' }, angleLines:{ color:'rgba(0,33,105,0.1)' } } },
+      plugins: { legend: { display:false }, tooltip:{ callbacks:{ label: c => c.dataset.label + ' : ' + c.raw + ' / 30' } } },
     },
   });
 }
